@@ -41,6 +41,16 @@ app.get('/api/persons/:id', (request, response) => {
     response.json(person)
 })
 
+app.delete('/api/persons/:id', (request, response) => {
+    const id = Number(request.params.id)
+    const total = persons.length;
+    persons = persons.filter(p => p.id !== id)
+
+    const status = total === persons.length ? 404 : 204
+    
+    return response.status(status).end()
+})
+
 
 app.get('/info', (request, response) => {
     const datetime = new Date()
