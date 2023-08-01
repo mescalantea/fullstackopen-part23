@@ -47,8 +47,21 @@ app.delete('/api/persons/:id', (request, response) => {
     persons = persons.filter(p => p.id !== id)
 
     const status = total === persons.length ? 404 : 204
-    
+
     return response.status(status).end()
+})
+
+const randomId = (min = 1, max = 999999999) => {
+    return Math.round(Math.random() * (max - min) + min)
+}
+
+app.post('/api/persons', (request, response) => {
+    persons.push({
+        ...request.body,
+        id: randomId()
+    })
+
+    return response.status(201).json(persons.slice(-1))
 })
 
 
