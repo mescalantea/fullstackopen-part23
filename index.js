@@ -56,12 +56,32 @@ const randomId = (min = 1, max = 999999999) => {
 }
 
 app.post('/api/persons', (request, response) => {
-    persons.push({
+
+    // validation
+    if (!request.body.name) {
+        return response.status(400).json({
+            error: 'name is empty'
+        })
+    }
+    if (!request.body.number) {
+        return response.status(400).json({
+            error: 'number is empty'
+        })
+    }
+
+    if (persons.find(p => p.name === request.body.name)) {
+        return response.status(400).json({
+            error: 'name must be unique'
+        })
+    }
+
+    const newPerson = {
         ...request.body,
         id: randomId()
-    })
+    }
+    persons.push(newPerson)
 
-    return response.status(201).json(persons.slice(-1))
+    return response.status(201).json(newPerson)
 })
 
 
